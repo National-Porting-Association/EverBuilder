@@ -35,7 +35,6 @@ Option B — Microsoft Visual C++ (cl.exe)
 gcc -O2 -Wall -o tools\everbuilder_installer\everbuilder.exe tools\everbuilder_installer\main.c
 ```
 
-Note: earlier builds used `-municode` which can force a GUI subsystem link and require a `wWinMain` entry; the GUI source included here uses `WinMain` so `-municode` is not required.
 
 How to run
 
