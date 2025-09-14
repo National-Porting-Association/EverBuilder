@@ -34,7 +34,7 @@ python build.py
 
 Open `http://127.0.0.1:5000/everbuilder` in your browser. The web UI includes options to help make sure your offline html files works correctly.
 
-New: Windows GUI installer/launcher
+Windows GUI installer/launcher
 
 A small Win32 launcher source is provided in `tools/everbuilder_installer/main.c`. It builds a simple GUI that can:
 
