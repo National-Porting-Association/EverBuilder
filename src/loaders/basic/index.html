@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+  .everloader{position:fixed;inset:0;background:linear-gradient(180deg,#091018, #031129);display:flex;align-items:center;justify-content:center;z-index:99999}
+  .box{width:320px;padding:24px;border-radius:12px;background:rgba(255,255,255,0.03);text-align:center;color:#dfffe8}
+  .bar{height:12px;background:#052b1f;border-radius:8px;overflow:hidden;margin-top:12px}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,#6ee7b7,#34d399);transition:width 500ms ease}
+</style>
+</head>
+<body>
+  <div class="everloader" id="everbuilder-loader">
+    <div class="box">
+      <div style="font-weight:700;font-size:18px">Loading...</div>
+      <div style="color:#9fb8a8;margin-top:6px">Preparing assets</div>
+      <div class="bar"><div class="fill" id="basicFill"></div></div>
+    </div>
+  </div>
+<script>
+  (function(){
+    var p=0; var el=document.getElementById('basicFill');
+    var iv=setInterval(function(){ p=Math.min(95,p+Math.random()*10); if(el) el.style.width=p+'%'; if(p>=95) clearInterval(iv); }, 300);
+    window.addEventListener('load', function(){
+      if(el) el.style.width='100%';
+      // don't auto-hide when running inside an iframe (preview)
+      try{
+        if (window.self !== window.top) {
+          return;
+        }
+      }catch(e){ /* ignore */ }
+      setTimeout(function(){ var e=document.getElementById('everbuilder-loader'); if(e) e.parentNode.removeChild(e); },400);
+    });
+  })();
+</script>
+</body>
+</html>

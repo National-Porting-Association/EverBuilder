@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EverBuilder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root{--bg:#0f1724;--card:#0b1220;--muted:#98a0b3;--accent:#6ee7b7;--accent-2:#34d399}
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;background:linear-gradient(180deg,#071226 0%, #071a2b 60%);color:#e6eef6}
+      .app{max-width:1200px;margin:28px auto;padding:20px}
+      header{display:flex;align-items:center;gap:16px}
+  .logo{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .logo img{width:100%;height:100%;object-fit:cover}
+      h1{margin:0;font-size:20px}
+      .sub{color:var(--muted);font-size:13px;margin-top:4px}
+
+      .layout{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+      .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); padding:16px;border-radius:12px}
+
+      .left{display:flex;flex-direction:column;gap:12px}
+      .file-list{height:220px;overflow:auto;background:rgba(255,255,255,0.02);border-radius:8px;padding:10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace}
+      .meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}
+
+      .controls{display:flex;gap:8px;margin-top:10px}
+      .btn{padding:10px 14px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:inherit;cursor:pointer}
+      .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#04251f;font-weight:600}
+      .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+      .progress{margin-top:10px}
+      .progress-bar{height:14px;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden}
+      .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#10b981);transition:width 400ms ease}
+
+      .right{display:flex;flex-direction:column;gap:12px}
+      .settings label{display:flex;align-items:center;gap:8px;color:var(--muted)}
+      pre{background:#051018;border-radius:8px;padding:12px;color:#b3ffd9;height:220px;overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+
+      .artifact{display:flex;align-items:center;gap:10px}
+      .artifact .name{font-weight:600}
+
+      footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+      @media(max-width:980px){.layout{grid-template-columns:1fr}.logo{display:none}}
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header>
+  <div class="logo"><img src="/everbuilder_static/everlyst-icon.png" alt="Everlyst logo" onerror="this.style.display='none'"> <div style="font-weight:700;color:#043028;display:none">EB</div></div>
+        <div>
+          <h1>EverBuilder</h1>
+          <div class="sub">Create offline builds quickly</div>
+        </div>
+      </header>
+
+      <div class="layout">
+        <div class="left">
+          <div class="card">
+            <div class="meta"><div class="small">Select folder</div><div class="small muted">Drop or use the picker</div></div>
+            <div style="margin-top:8px">
+              <input id="dirInput" type="file" webkitdirectory directory multiple style="width:100%" />
+            </div>
+            <div class="meta" style="margin-top:10px"><div>Selected <strong id="fileCount">0</strong> files</div><div id="fileSize">0 B</div></div>
+
+            <div class="file-list" id="fileList">(no files)</div>
+
+            <div class="controls">
+              <button id="buildBtn" class="btn primary" disabled>Build</button>
+              <button id="clearBtn" class="btn ghost">Clear</button>
+              <div style="flex:1"></div>
+              <div id="statusText" class="small muted">Idle</div>
+            </div>
+
+            <div class="progress">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div class="small muted">Progress</div>
+                <div class="small muted" id="progressPct">0%</div>
+              </div>
+              <div class="progress-bar" style="margin-top:8px"><div id="progressBar" class="progress-fill"></div></div>
+              <div style="display:flex;justify-content:space-between;margin-top:8px"><div class="small muted" id="eta">ETA: --:--</div><div class="small muted" id="spinnerSmall"></div></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin:0 0 8px 0">Build log</h3>
+            <pre id="logArea">No build run yet.</pre>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+              <a id="downloadLog" href="#" download="build.log" style="display:none" class="btn">Download log</a>
+              <a id="downloadBuild" href="#" download style="display:none" class="btn primary">Download artifact</a>
+              <button id="copyLog" class="btn ghost">Copy log</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="card settings">
+            <h3 style="margin-top:0">Settings</h3>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <label><input type="checkbox" id="opt_clean_temp" /> Remove temp files after build</label>
+              <label id="autoOpenRow" style="display:none"><input type="checkbox" id="opt_auto_open" /> Auto-open artifact after build</label>
+              <label><input type="checkbox" id="opt_verbose" /> Show verbose logs</label>
+              <label><input type="checkbox" id="opt_compress" /> Compress assets (Brotli) when embedding</label>
+              <label style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+                <div style="font-size:13px;color:var(--muted)">Loader</div>
+                <select id="loaderSelect" style="padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit">
+                  <option value="basic">basic</option>
+                </select>
+              </label>
+              <div style="margin-top:8px">
+                <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Preview</div>
+                <div style="border:1px solid rgba(255,255,255,0.04);border-radius:8px;overflow:hidden">
+                  <iframe id="loaderPreview" src="/everbuilder_static/loaders/basic/index.html" style="width:100%;height:180px;border:0;background:transparent"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0">Artifact</h3>
+            <div class="artifact">
+              <div class="name artifact-name" id="artifactName">-</div>
+              <div id="artifactSize" class="small muted">-</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0">About</h3>
+            <div class="small muted">EverBuilder — a tool for bundling web applications into single offline html files.</div>
+          </div>
+        </div>
+      </div>
+
+      <footer>EverBuilder • All Rights Reserved</footer>
+    </div>
+
+    <script src="/everbuilder_static/index.js"></script>
+  </body>
+</html>
