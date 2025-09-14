@@ -32,7 +32,7 @@ Run the web UI (Flask) which provides a drag-and-drop upload builder:
 python build.py
 ```
 
-Open `http://127.0.0.1:5000/everbuilder` in your browser. The web UI includes options to embed CSS directly and enable compression when supported by the server.
+Open `http://127.0.0.1:5000/everbuilder` in your browser. The web UI includes options to help make sure your offline html files works correctly.
 
 New: Windows GUI installer/launcher
 
