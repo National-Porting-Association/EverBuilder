@@ -31,6 +31,8 @@ VARIABLES = {
 # Runtime flags (controlled by the server when running builds)
 GLOBAL_VERBOSE = False
 GLOBAL_EMIT_PROGRESS = False
+# When running the web UI, optionally skip auto-opening the browser (used by embedded launcher)
+GLOBAL_NO_BROWSER = False
 # Binary extensions that are needed for WASM
 BINARY_EXTS = {'.wasm', '.data', '.mem', '.symbols', '.bundle'}
 # --------------------------------
@@ -970,11 +972,21 @@ if __name__ == "__main__":
             })
 
         url = f'http://127.0.0.1:{port}/everbuilder'
-        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+        # Only auto-open the browser if not suppressed by GLOBAL_NO_BROWSER
+        try:
+            if not GLOBAL_NO_BROWSER:
+                threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+        except Exception:
+            pass
         app.run(port=port, debug=False, threaded=True)
 
 # decide mode
 if len(sys.argv) > 1 and sys.argv[1] == '--cli':
     cli_build()
 else:
+    # detect --no-browser flag so external launchers can suppress the auto-open behavior
+    try:
+        GLOBAL_NO_BROWSER = '--no-browser' in sys.argv
+    except Exception:
+        GLOBAL_NO_BROWSER = False
     serve_ui()
