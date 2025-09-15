@@ -96,5 +96,3 @@ The built executable will be at `tools\everbuilder_installer\build\Release\everb
 ## Contact
 
 - Chat on our Discord: https://discord.gg/SsW6agAQxR
-
-```
