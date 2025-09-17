@@ -67,8 +67,7 @@ Notes:
 A Win32 launcher is available in `tools/everbuilder_installer/`. It provides a GUI with the following features:
 
 - Install Dependencies.
-- Copy `build.py` to `src`.
-- Launch Web UI (default behavior).
+- Launch Web UI.
 - Launch Embedded UI
 
 ### Build with CMake
