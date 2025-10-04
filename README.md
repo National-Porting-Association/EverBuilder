@@ -83,11 +83,6 @@ cmake --build . --config Release
 
 The built executable will be at `tools\everbuilder_installer\build\Release\everbuilder_installer.exe`.
 
-## Next steps / Contributions
-
-- If you want true in-window embedding, I can integrate WebView2 (I can implement dynamic loading to avoid needing the SDK at compile-time).
-- If you have artwork/icons or a UI library you prefer, drop them into `tools/everbuilder_installer/third_party/` and I'll wire them into the UI.
-
 ## Contributing
 
 - Open issues or PRs with improvements.
