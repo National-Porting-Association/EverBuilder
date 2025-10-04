@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 python build.py --cli --embed-css
 ```
 
-5. To enable Brotli compression for embedded assets (only when `brotli` is installed):
+5. To enable Brotli compression for embedded assets:
 
 ```powershell
 python -m pip install brotli
@@ -27,7 +27,7 @@ python build.py --cli --compress
 ## Quickstart (CLI)
 
 1. Ensure Python 3.11+ is installed and on PATH.
-2. Install dependencies used by the builder (if you want to run the web UI):
+2. Install dependencies used by the builder:
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -40,7 +40,7 @@ python -m pip install -r requirements.txt
 python build.py --cli --embed-css
 ```
 
-5. To enable Brotli compression for embedded assets (optional):
+5. To enable Brotli compression for embedded assets:
 
 ```powershell
 python -m pip install brotli
